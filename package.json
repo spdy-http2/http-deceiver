@@ -1,6 +1,6 @@
 {
   "name": "http-deceiver",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Deceive HTTP parser",
   "main": "lib/deceiver.js",
   "scripts": {
