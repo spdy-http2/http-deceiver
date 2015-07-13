@@ -72,4 +72,35 @@ describe('HTTP Deceiver', function() {
       });
     });
   });
+
+  it('should override .execute and .finish', function(done) {
+    var server = http.createServer();
+    server.emit('connection', socket);
+
+    server.on('request', function(req, res) {
+      assert.equal(req.method, 'PUT');
+      assert.equal(req.url, '/hello');
+      assert.deepEqual(req.headers, { a: 'b' });
+
+      var actual = '';
+      req.on('data', function(chunk) {
+        actual += chunk;
+      });
+      req.once('end', function() {
+        assert.equal(actual, 'hello world');
+        done();
+      });
+    });
+
+    deceiver.emitRequest({
+      method: 'PUT',
+      path: '/hello',
+      headers: {
+        a: 'b'
+      }
+    });
+
+    pair.write('hello');
+    pair.end(' world');
+  });
 });
