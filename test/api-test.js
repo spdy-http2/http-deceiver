@@ -103,4 +103,49 @@ describe('HTTP Deceiver', function() {
     pair.write('hello');
     pair.end(' world');
   });
+
+  it('should work with reusing parser', function(done) {
+    var server = http.createServer();
+    server.emit('connection', socket);
+
+    function secondRequest() {
+      pair = streamPair.create();
+      handle = thing.create(pair.other);
+      socket = new net.Socket({ handle: handle });
+
+      // For v0.8
+      socket.readable = true;
+      socket.writable = true;
+
+      server.emit('connection', socket);
+
+      pair.end('PUT /second HTTP/1.1\r\nContent-Length:11\r\n\r\nhello world');
+    }
+
+    server.on('request', function(req, res) {
+      var actual = '';
+      req.on('data', function(chunk) {
+        actual += chunk;
+      });
+      req.once('end', function() {
+        assert.equal(actual, 'hello world');
+
+        if (req.url === '/first')
+          secondRequest();
+        else
+          done();
+      });
+    });
+
+    deceiver.emitRequest({
+      method: 'PUT',
+      path: '/first',
+      headers: {
+        a: 'b'
+      }
+    });
+
+    pair.write('hello');
+    pair.end(' world');
+  });
 });
