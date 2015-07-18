@@ -24,7 +24,6 @@ describe('HTTP Deceiver', function() {
     deceiver = httpDeceiver.create(socket);
   });
 
-
   it('should emit request', function(done) {
     var server = http.createServer();
     server.emit('connection', socket);
@@ -147,5 +146,77 @@ describe('HTTP Deceiver', function() {
 
     pair.write('hello');
     pair.end(' world');
+  });
+
+  it('should emit CONNECT request', function(done) {
+    var server = http.createServer();
+    server.emit('connection', socket);
+
+    server.on('connect', function(req, socket, bodyHead) {
+      assert.equal(req.method, 'CONNECT');
+      assert.equal(req.url, '/hello');
+
+      done();
+    });
+
+    deceiver.emitRequest({
+      method: 'CONNECT',
+      path: '/hello',
+      headers: {
+      }
+    });
+  });
+
+  it('should emit Upgrade request', function(done) {
+    var server = http.createServer();
+    server.emit('connection', socket);
+
+    server.on('upgrade', function(req, socket, bodyHead) {
+      assert.equal(req.method, 'POST');
+      assert.equal(req.url, '/hello');
+
+      socket.on('data', function(chunk) {
+        assert.equal(chunk + '', 'hm');
+        done();
+      });
+    });
+
+    deceiver.emitRequest({
+      method: 'POST',
+      path: '/hello',
+      headers: {
+        'upgrade': 'websocket'
+      }
+    });
+
+    pair.write('hm');
+  });
+
+  it('should emit Upgrade response', function(done) {
+    var agent = new http.Agent();
+    agent.createConnection = function createConnection() {
+      return socket;
+    };
+    var client = http.request({
+      method: 'POST',
+      path: '/ok',
+      agent: agent
+    }, function(res) {
+      assert(false);
+    });
+    client.on('upgrade', function(res, socket) {
+      assert.equal(res.statusCode, 421);
+      done();
+    });
+
+    process.nextTick(function() {
+      deceiver.emitResponse({
+        status: 421,
+        reason: 'F',
+        headers: {
+          upgrade: 'websocket'
+        }
+      });
+    });
   });
 });
