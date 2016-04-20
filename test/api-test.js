@@ -200,6 +200,10 @@ describe('HTTP Deceiver', function() {
     var client = http.request({
       method: 'POST',
       path: '/ok',
+      headers: {
+        connection: 'upgrade',
+        upgrade: 'websocket'
+      },
       agent: agent
     }, function(res) {
       assert(false);
