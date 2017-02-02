@@ -4,11 +4,17 @@
   "description": "Deceive HTTP parser",
   "main": "lib/deceiver.js",
   "scripts": {
-    "test": "mocha --reporter=spec test/*-test.js"
+    "lint": "standard",
+    "test": "mocha --reporter=spec test/*-test.js",
+    "coverage": "istanbul cover node_modules/.bin/_mocha -- --reporter=spec test/**/*-test.js"
   },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/indutny/http-deceiver.git"
+    "url": "git+ssh://git@github.com/spdy-http2/http-deceiver.git"
   },
   "keywords": [
     "http",
@@ -18,13 +24,16 @@
   "author": "Fedor Indutny <fedor@indutny.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/indutny/http-deceiver/issues"
+    "url": "https://github.com/spdy-http2/http-deceiver/issues"
   },
-  "homepage": "https://github.com/indutny/http-deceiver#readme",
+  "homepage": "https://github.com/spdy-http2/http-deceiver#readme",
   "devDependencies": {
     "handle-thing": "^1.0.1",
+    "istanbul": "^0.4.5",
     "mocha": "^2.2.5",
+    "pre-commit": "^1.2.2",
     "readable-stream": "^2.0.1",
+    "standard": "^8.6.0",
     "stream-pair": "^1.0.0"
   }
 }

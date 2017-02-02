@@ -1,9 +1,22 @@
 # HTTP Deceiver
 
-[![Build Status](https://secure.travis-ci.org/indutny/http-deceiver.png)](http://travis-ci.org/indutny/http-deceiver)
+[![Build Status](https://travis-ci.org/spdy-http2/http-deceiver.svg?branch=master)](http://travis-ci.org/spdy-http2/http-deceiver)
 [![NPM version](https://badge.fury.io/js/http-deceiver.svg)](http://badge.fury.io/js/http-deceiver)
+[![dependencies Status](https://david-dm.org/spdy-http2/http-deceiver/status.svg?style=flat-square)](https://david-dm.org/spdy-http2/http-deceiver)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](http://standardjs.com/)
+[![Waffle](https://img.shields.io/badge/track-waffle-blue.svg?style=flat-square)](https://waffle.io/spdy-http2/node-spdy)
 
-Deceive!
+> Deceive!
+
+## Usage
+
+### Examples
+
+`soon™`
+
+### API
+
+`soon™`
 
 ## LICENSE
 
